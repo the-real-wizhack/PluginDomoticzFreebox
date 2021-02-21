@@ -27,7 +27,9 @@ class FbxCnx:
         return s=="granted" and token
 
     def _com(self,method,data=None,headers=None):
-        url = self.host+"/api/v4/"+method
+        url_get = requests.get("http://mafreebox.freebox.fr/api_version")
+        apiv = url_get.json()["api_version"]
+        url = self.host+"/api/v"+apiv+"/"+method
         if data: 
             data = json.dumps(data) #On transforme en string le dict
             data = data.encode() #On transforme en tableau de byte le string pour Request
@@ -42,7 +44,7 @@ class FbxCnx:
         return json.loads(res.decode())
 
     def _put(self,method,data=None,headers=None):
-        url = self.host+"/api/v4/"+method
+        url = self.host+"/api/v"+apiv+"/"+method
         if data: 
             data = json.dumps(data) #On transforme en string le dict
             data = data.encode() #On transforme en tableau de byte le string pour Request
@@ -60,7 +62,7 @@ class FbxCnx:
         return json.loads(res.decode())
 
     def _get(self,method,data=None,headers=None):
-        url = self.host+"/api/v4/"+method
+        url = self.host+"/api/v"+apiv+"/"+method
         if headers:
             request = Request(url,headers=headers)
         else:
