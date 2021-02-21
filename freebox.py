@@ -28,7 +28,7 @@ class FbxCnx:
 
     def _com(self,method,data=None,headers=None):
         url_get = requests.get("http://mafreebox.freebox.fr/api_version")
-        apiv = url_get.json()["api_version"]
+        apiv = url_get.json()["api_version"][0:1]
         url = self.host+"/api/v"+apiv+"/"+method
         if data: 
             data = json.dumps(data) #On transforme en string le dict
