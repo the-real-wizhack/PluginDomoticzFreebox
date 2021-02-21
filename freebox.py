@@ -1,6 +1,6 @@
 #Code adapté de http://www.manatlan.com/blog/freeboxv6_api_v3_avec_python
 
-import urllib.request,hmac,json,hashlib,time,Domoticz
+import urllib.request,hmac,json,hashlib,time,Domoticz,requests
 from urllib.request import urlopen,Request
 from socket import timeout
 
