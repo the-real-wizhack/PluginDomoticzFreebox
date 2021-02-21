@@ -29,7 +29,7 @@ class FbxCnx:
         return s=="granted" and token
 
     def _com(self,method,data=None,headers=None):
-                url = self.host+"/api/v"+apiv+"/"+method
+        url = self.host+"/api/v"+apiv+"/"+method
         if data: 
             data = json.dumps(data) #On transforme en string le dict
             data = data.encode() #On transforme en tableau de byte le string pour Request
