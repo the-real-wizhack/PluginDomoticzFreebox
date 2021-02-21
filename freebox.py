@@ -7,10 +7,12 @@ from socket import timeout
 class FbxCnx:
     def __init__(self,host="mafreebox.freebox.fr"):
         self.host=host
+        url_get = requests.get(self.host+"/api_version")
+        apiv = url_get.json()["api_version"][0:1]
 
     def register(self,appid,appname,version,devname):
         data={'app_id': appid,'app_name': appname,'app_version':version,'device_name': devname}
-        result=self._com("login/authorize/",data)
+        result=self._com("/api/v"+apiv+"/login/authorize/",data)
         if not result["success"]:
             return "Erreur Reponse Freebox : " + result["msg"]
         r=result["result"]
@@ -27,9 +29,7 @@ class FbxCnx:
         return s=="granted" and token
 
     def _com(self,method,data=None,headers=None):
-        url_get = requests.get("http://mafreebox.freebox.fr/api_version")
-        apiv = url_get.json()["api_version"][0:1]
-        url = self.host+"/api/v"+apiv+"/"+method
+                url = self.host+"/api/v"+apiv+"/"+method
         if data: 
             data = json.dumps(data) #On transforme en string le dict
             data = data.encode() #On transforme en tableau de byte le string pour Request
@@ -86,7 +86,7 @@ class FbxCnx:
     #     # return
 
 class FbxApp(FbxCnx):
-    def __init__(self,appid,token,session=None,host="mafreebox.free.fr"):
+    def __init__(self,appid,token,session=None,host="mafreebox.freebox.fr"):
         FbxCnx.__init__(self,host)
         self.appid,self.token=appid,token
         self.session=session if session else self._mksession()
