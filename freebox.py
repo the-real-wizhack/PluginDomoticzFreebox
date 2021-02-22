@@ -5,7 +5,7 @@ from urllib.request import urlopen,Request
 from socket import timeout
 
 class FbxCnx:
-    def __init__(self,host="mafreebox.freebox.fr",apiv):
+    def __init__(self,host="mafreebox.freebox.fr"):
         self.host=host
         url_get = requests.get(self.host+"/api_version")
         apiv = url_get.json()["api_version"][0:1]
