@@ -1,18 +1,16 @@
 #Code adapté de http://www.manatlan.com/blog/freeboxv6_api_v3_avec_python
 
-import urllib.request,hmac,json,hashlib,time,Domoticz,requests
+import urllib.request,hmac,json,hashlib,time,Domoticz
 from urllib.request import urlopen,Request
 from socket import timeout
 
 class FbxCnx:
-    def __init__(self,apiv,host="mafreebox.freebox.fr"):
+    def __init__(self,host="mafreebox.freebox.fr"):
         self.host=host
-        apiv_get = requests.get("http://"+self.host+"/api_version")
-        apiv = apiv_get.json()["api_version"][0:1]
 
     def register(self,appid,appname,version,devname):
         data={'app_id': appid,'app_name': appname,'app_version':version,'device_name': devname}
-        result=self._com("/api/v"+apiv+"/login/authorize/",data)
+        result=self._com("login/authorize/",data)
         if not result["success"]:
             return "Erreur Reponse Freebox : " + result["msg"]
         r=result["result"]
@@ -29,7 +27,7 @@ class FbxCnx:
         return s=="granted" and token
 
     def _com(self,method,data=None,headers=None):
-        url = self.host+"/api/v"+apiv+"/"+method
+        url = self.host+"/api/v4/"+method
         if data: 
             data = json.dumps(data) #On transforme en string le dict
             data = data.encode() #On transforme en tableau de byte le string pour Request
@@ -44,7 +42,7 @@ class FbxCnx:
         return json.loads(res.decode())
 
     def _put(self,method,data=None,headers=None):
-        url = self.host+"/api/v"+apiv+"/"+method
+        url = self.host+"/api/v4/"+method
         if data: 
             data = json.dumps(data) #On transforme en string le dict
             data = data.encode() #On transforme en tableau de byte le string pour Request
@@ -62,7 +60,7 @@ class FbxCnx:
         return json.loads(res.decode())
 
     def _get(self,method,data=None,headers=None):
-        url = self.host+"/api/v"+apiv+"/"+method
+        url = self.host+"/api/v4/"+method
         if headers:
             request = Request(url,headers=headers)
         else:
@@ -86,7 +84,7 @@ class FbxCnx:
     #     # return
 
 class FbxApp(FbxCnx):
-    def __init__(self,appid,token,session=None,host="mafreebox.freebox.fr"):
+    def __init__(self,appid,token,session=None,host="mafreebox.free.fr"):
         FbxCnx.__init__(self,host)
         self.appid,self.token=appid,token
         self.session=session if session else self._mksession()
