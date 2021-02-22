@@ -7,7 +7,7 @@ from socket import timeout
 class FbxCnx:
     def __init__(self,apiv,host="mafreebox.freebox.fr"):
         self.host=host
-        apiv_get = requests.get("http://"self.host+"/api_version")
+        apiv_get = requests.get("http://"+self.host+"/api_version")
         apiv = apiv_get.json()["api_version"][0:1]
 
     def register(self,appid,appname,version,devname):
